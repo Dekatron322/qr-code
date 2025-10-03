@@ -1,99 +1,140 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Download Ultra App</title>
+		<title>Ultra App</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<script>
-			// Platform detection and redirect
-			function detectPlatform() {
-				const userAgent = navigator.userAgent.toLowerCase();
+			// Deep link URLs for your app
+			const DEEP_LINK_URL = "ultraapp://";
+			const APP_STORE_URL =
+				"https://apps.apple.com/ng/app/ultra-app/id6450269232";
+			const PLAY_STORE_URL =
+				"https://play.google.com/store/apps/details?id=com.ahmadhabib.ultraappfrontend";
 
-				// Android detection
-				if (userAgent.includes("android")) {
-					window.location.href =
-						"https://play.google.com/store/apps/details?id=com.ahmadhabib.ultraappfrontend";
-					return;
-				}
+			function detectPlatformAndRedirect() {
+				const userAgent =
+					navigator.userAgent || navigator.vendor || window.opera;
+				let isAndroid = /android/i.test(userAgent);
+				let isiOS = /iPad|iPhone|iPod/.test(userAgent) && !window.MSStream;
 
-				// iOS detection
-				if (
-					userAgent.includes("iphone") ||
-					userAgent.includes("ipad") ||
-					userAgent.includes("ipod")
-				) {
-					window.location.href =
-						"https://apps.apple.com/ng/app/ultra-app/id6450269232";
-					return;
-				}
-
-				// Fallback - show choice page
-				document.getElementById("fallback").style.display = "block";
+				// Try to open the app first
+				attemptToOpenApp(isAndroid, isiOS);
 			}
 
-			// Run detection when page loads
-			window.onload = detectPlatform;
+			function attemptToOpenApp(isAndroid, isiOS) {
+				// Set timeout for app detection
+				let appOpened = false;
+				const startTime = Date.now();
+
+				// Try to open the app
+				window.location.href = DEEP_LINK_URL;
+
+				// Listen for page visibility change (app switch)
+				document.addEventListener("visibilitychange", function () {
+					if (document.hidden) {
+						appOpened = true;
+					}
+				});
+
+				// Fallback to app store if app not installed
+				setTimeout(function () {
+					if (!appOpened && Date.now() - startTime < 2000) {
+						if (isAndroid) {
+							window.location.href = PLAY_STORE_URL;
+						} else if (isiOS) {
+							window.location.href = APP_STORE_URL;
+						} else {
+							showFallbackOptions();
+						}
+					}
+				}, 500);
+
+				// Final fallback
+				setTimeout(function () {
+					if (!appOpened) {
+						if (isAndroid) {
+							window.location.href = PLAY_STORE_URL;
+						} else if (isiOS) {
+							window.location.href = APP_STORE_URL;
+						} else {
+							showFallbackOptions();
+						}
+					}
+				}, 1500);
+			}
+
+			function showFallbackOptions() {
+				document.body.innerHTML = `
+                <div style="text-align: center; padding: 50px; font-family: Arial, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+                    <div style="background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); max-width: 400px; width: 100%;">
+                        <h1 style="color: #333; margin-bottom: 10px;">Ultra App</h1>
+                        <p style="color: #666; margin-bottom: 30px;">Choose your download method</p>
+                        <div style="display: flex; flex-direction: column; gap: 15px;">
+                            <a href="${APP_STORE_URL}" 
+                               style="display: flex; align-items: center; gap: 15px; padding: 15px 20px; background: #000; color: white; text-decoration: none; border-radius: 12px; font-weight: bold; transition: transform 0.2s;">
+                                <span>📱</span>
+                                <div style="text-align: left;">
+                                    <div style="font-size: 12px; opacity: 0.8;">Download on the</div>
+                                    <div>App Store</div>
+                                </div>
+                            </a>
+                            <a href="${PLAY_STORE_URL}" 
+                               style="display: flex; align-items: center; gap: 15px; padding: 15px 20px; background: #000; color: white; text-decoration: none; border-radius: 12px; font-weight: bold; transition: transform 0.2s;">
+                                <span>🤖</span>
+                                <div style="text-align: left;">
+                                    <div style="font-size: 12px; opacity: 0.8;">Get it on</div>
+                                    <div>Google Play</div>
+                                </div>
+                            </a>
+                        </div>
+                        <p style="margin-top: 25px; font-size: 12px; color: #999;">
+                            Already have the app? <a href="${DEEP_LINK_URL}" style="color: #667eea; text-decoration: none;">Open Ultra App</a>
+                        </p>
+                    </div>
+                </div>
+            `;
+
+				// Add hover effects
+				const links = document.querySelectorAll("a");
+				links.forEach((link) => {
+					link.addEventListener("mouseenter", () => {
+						link.style.transform = "translateY(-2px)";
+					});
+					link.addEventListener("mouseleave", () => {
+						link.style.transform = "translateY(0)";
+					});
+				});
+			}
+
+			// Start the process when page loads
+			window.onload = detectPlatformAndRedirect;
 		</script>
 		<style>
 			body {
+				margin: 0;
+				padding: 0;
+				background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 				font-family: Arial, sans-serif;
-				text-align: center;
-				padding: 50px;
-				background: #f5f5f5;
-			}
-			.container {
-				background: white;
-				padding: 30px;
-				border-radius: 10px;
-				box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-				max-width: 400px;
-				margin: 0 auto;
-			}
-			.button {
-				display: block;
-				margin: 15px 0;
-				padding: 15px;
-				background: #000;
-				color: white;
-				text-decoration: none;
-				border-radius: 8px;
-				font-weight: bold;
-			}
-			.button:hover {
-				background: #333;
-			}
-			#fallback {
-				display: none;
 			}
 		</style>
 	</head>
 	<body>
-		<div class="container">
-			<h1>Ultra App</h1>
-			<div id="fallback">
-				<p>Choose your download method:</p>
-				<a
-					href="https://apps.apple.com/ng/app/ultra-app/id6450269232"
-					class="button"
-					>Download for iOS</a
-				>
-				<a
-					href="https://play.google.com/store/apps/details?id=com.ahmadhabib.ultraappfrontend"
-					class="button"
-					>Download for Android</a
-				>
+		<div
+			style="
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				min-height: 100vh;
+				color: white;
+			"
+		>
+			<div style="text-align: center">
+				<div style="font-size: 24px; margin-bottom: 20px">⚡</div>
+				<div>Opening Ultra App...</div>
+				<div style="font-size: 14px; opacity: 0.8; margin-top: 10px">
+					If the app doesn't open, you'll be redirected to download
+				</div>
 			</div>
-			<noscript>
-				<p>Please enable JavaScript or choose your platform:</p>
-				<a
-					href="https://apps.apple.com/ng/app/ultra-app/id6450269232"
-					class="button"
-					>Download for iOS</a
-				>
-				<a
-					href="https://play.google.com/store/apps/details?id=com.ahmadhabib.ultraappfrontend"
-					class="button"
-					>Download for Android</a
-				>
-			</noscript>
 		</div>
 	</body>
 </html>
