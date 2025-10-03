@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script>
+			const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+			if (/android/i.test(userAgent)) {
+				window.location.href =
+					"https://play.google.com/store/apps/details?id=com.ahmadhabib.ultraappfrontend";
+			} else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+				window.location.href =
+					"https://apps.apple.com/ng/app/ultra-app/id6450269232";
+			} else {
+				// Fallback - show both options
+				document.body.innerHTML = `
+                <div style="text-align: center; padding: 50px; font-family: Arial, sans-serif;">
+                    <h1>Download Ultra App</h1>
+                    <p>Choose your platform:</p>
+                    <div style="margin: 20px;">
+                        <a href="https://apps.apple.com/ng/app/ultra-app/id6450269232" 
+                           style="display: inline-block; margin: 10px; padding: 15px 25px; background: #000; color: white; text-decoration: none; border-radius: 8px;">
+                            iOS App Store
+                        </a>
+                        <a href="https://play.google.com/store/apps/details?id=com.ahmadhabib.ultraappfrontend" 
+                           style="display: inline-block; margin: 10px; padding: 15px 25px; background: #000; color: white; text-decoration: none; border-radius: 8px;">
+                            Google Play Store
+                        </a>
+                    </div>
+                </div>
+            `;
+			}
+		</script>
+	</head>
+	<body>
+		<noscript>
+			<div style="text-align: center; padding: 50px">
+				<h1>Download Ultra App</h1>
+				<p>Please enable JavaScript or choose your platform:</p>
+				<div style="margin: 20px">
+					<a
+						href="https://apps.apple.com/ng/app/ultra-app/id6450269232"
+						style="
+							display: inline-block;
+							margin: 10px;
+							padding: 15px 25px;
+							background: #000;
+							color: white;
+							text-decoration: none;
+						"
+					>
+						iOS App Store
+					</a>
+					<a
+						href="https://play.google.com/store/apps/details?id=com.ahmadhabib.ultraappfrontend"
+						style="
+							display: inline-block;
+							margin: 10px;
+							padding: 15px 25px;
+							background: #000;
+							color: white;
+							text-decoration: none;
+						"
+					>
+						Google Play Store
+					</a>
+				</div>
+			</div>
+		</noscript>
+	</body>
+</html>
