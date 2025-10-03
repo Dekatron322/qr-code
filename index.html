@@ -1,70 +1,99 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<title>Download Ultra App</title>
 		<script>
-			const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+			// Platform detection and redirect
+			function detectPlatform() {
+				const userAgent = navigator.userAgent.toLowerCase();
 
-			if (/android/i.test(userAgent)) {
-				window.location.href =
-					"https://play.google.com/store/apps/details?id=com.ahmadhabib.ultraappfrontend";
-			} else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-				window.location.href =
-					"https://apps.apple.com/ng/app/ultra-app/id6450269232";
-			} else {
-				// Fallback - show both options
-				document.body.innerHTML = `
-                <div style="text-align: center; padding: 50px; font-family: Arial, sans-serif;">
-                    <h1>Download Ultra App</h1>
-                    <p>Choose your platform:</p>
-                    <div style="margin: 20px;">
-                        <a href="https://apps.apple.com/ng/app/ultra-app/id6450269232" 
-                           style="display: inline-block; margin: 10px; padding: 15px 25px; background: #000; color: white; text-decoration: none; border-radius: 8px;">
-                            iOS App Store
-                        </a>
-                        <a href="https://play.google.com/store/apps/details?id=com.ahmadhabib.ultraappfrontend" 
-                           style="display: inline-block; margin: 10px; padding: 15px 25px; background: #000; color: white; text-decoration: none; border-radius: 8px;">
-                            Google Play Store
-                        </a>
-                    </div>
-                </div>
-            `;
+				// Android detection
+				if (userAgent.includes("android")) {
+					window.location.href =
+						"https://play.google.com/store/apps/details?id=com.ahmadhabib.ultraappfrontend";
+					return;
+				}
+
+				// iOS detection
+				if (
+					userAgent.includes("iphone") ||
+					userAgent.includes("ipad") ||
+					userAgent.includes("ipod")
+				) {
+					window.location.href =
+						"https://apps.apple.com/ng/app/ultra-app/id6450269232";
+					return;
+				}
+
+				// Fallback - show choice page
+				document.getElementById("fallback").style.display = "block";
 			}
+
+			// Run detection when page loads
+			window.onload = detectPlatform;
 		</script>
+		<style>
+			body {
+				font-family: Arial, sans-serif;
+				text-align: center;
+				padding: 50px;
+				background: #f5f5f5;
+			}
+			.container {
+				background: white;
+				padding: 30px;
+				border-radius: 10px;
+				box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+				max-width: 400px;
+				margin: 0 auto;
+			}
+			.button {
+				display: block;
+				margin: 15px 0;
+				padding: 15px;
+				background: #000;
+				color: white;
+				text-decoration: none;
+				border-radius: 8px;
+				font-weight: bold;
+			}
+			.button:hover {
+				background: #333;
+			}
+			#fallback {
+				display: none;
+			}
+		</style>
 	</head>
 	<body>
-		<noscript>
-			<div style="text-align: center; padding: 50px">
-				<h1>Download Ultra App</h1>
-				<p>Please enable JavaScript or choose your platform:</p>
-				<div style="margin: 20px">
-					<a
-						href="https://apps.apple.com/ng/app/ultra-app/id6450269232"
-						style="
-							display: inline-block;
-							margin: 10px;
-							padding: 15px 25px;
-							background: #000;
-							color: white;
-							text-decoration: none;
-						"
-					>
-						iOS App Store
-					</a>
-					<a
-						href="https://play.google.com/store/apps/details?id=com.ahmadhabib.ultraappfrontend"
-						style="
-							display: inline-block;
-							margin: 10px;
-							padding: 15px 25px;
-							background: #000;
-							color: white;
-							text-decoration: none;
-						"
-					>
-						Google Play Store
-					</a>
-				</div>
+		<div class="container">
+			<h1>Ultra App</h1>
+			<div id="fallback">
+				<p>Choose your download method:</p>
+				<a
+					href="https://apps.apple.com/ng/app/ultra-app/id6450269232"
+					class="button"
+					>Download for iOS</a
+				>
+				<a
+					href="https://play.google.com/store/apps/details?id=com.ahmadhabib.ultraappfrontend"
+					class="button"
+					>Download for Android</a
+				>
 			</div>
-		</noscript>
+			<noscript>
+				<p>Please enable JavaScript or choose your platform:</p>
+				<a
+					href="https://apps.apple.com/ng/app/ultra-app/id6450269232"
+					class="button"
+					>Download for iOS</a
+				>
+				<a
+					href="https://play.google.com/store/apps/details?id=com.ahmadhabib.ultraappfrontend"
+					class="button"
+					>Download for Android</a
+				>
+			</noscript>
+		</div>
 	</body>
 </html>
